@@ -1,0 +1,6 @@
+MYSQL_HOST = 'us-cdbr-east-05.cleardb.net'
+MYSQL_USER = 'bdb5edd9a02b22'
+MSQL_PASSWORD = '8ec3dd42'
+MYSQL_DATABASE = 'heroku_a539c6ceec2c4bd'
+MYSQL_PORT = 3306
+JWT_KEY = 'barbearia'

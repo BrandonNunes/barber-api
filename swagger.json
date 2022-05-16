@@ -1,0 +1,862 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Api para Gerenciamento de Uma Barbearia",
+    "version": "1.0.0",
+    "title": "API Barbearia"
+  },
+  "host": "https://barbearia-api-app.herokuapp.com",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Autenticação",
+      "description":
+      "Nescessário Autenticação para obtenção do Token para ter acesso as demais Rotas"
+
+    },
+    {
+      "name": "Usuários",
+      "description": "Gerenciamemento e Obtenção de dados de usuarios"
+    },
+    {
+      "name": "Agendamento",
+      "description": "Gerenciamemento e Obtenção de dados de agendamentos"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "summary": "Login e Autenticação",
+        "description": "Obtenção do token de acesso",
+        "operationId": "Login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "dados de autenticação",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "batatinha123@email.com"
+                },
+                "senha": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "batatinha123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "Autenticado com sucesso"
+                    },
+                    "token": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "token de acesso"
+                    },
+                    "usuario":{
+                      "type":"object",
+                      "description":"dados do usuario autorizado",
+                      "exemple": { }
+                    }
+                  }
+                }
+          },
+          "401": {
+            "description": "Não Autorizado",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type":"string",
+                      "description": "Resposta quando os dados não satisfazem a requisição ou são invalidos para acesso",
+                      "exemple": "Falha na Autenticação"
+                    }
+                  }
+                }
+          }
+        }
+
+      }
+    },
+    "/usuarios/novo" :{
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Adicionar Novo Usuario",
+        "description": "",
+        "operationId": "novo usuario",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Dados para cadastro",
+            "description": "Payload para cadastro de Usuarios",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "batatinha"
+                },
+                "email": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "batatinha123@email.com"
+                },
+                "senha": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "batatinhaFrita123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201":{
+            "description": "Sucesso",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "Usuário Criado com sucesso!"
+                    },
+                    "usuario": {
+                      "type":"object",
+                      "description": "",
+                      "exemple": {
+                        "usuario": "batatinha@teste3",
+                        "id": 1
+                      }
+                    }
+                  }
+                }
+          },
+          "409": {
+            "description": "Email ja cadastrado na base de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          }
+        }
+      }
+    },
+    "/usuarios" :{
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Lista todos os usuários cadastrados",
+        "description": "",
+        "operationId": "Listar usuarios",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "dados obtidos",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": 1
+                },
+                "nome": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "João"
+                },
+                "email": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "batatinha123@email.com"
+                },
+                "status": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "padrao"
+                }
+              }
+            }
+
+          }
+
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type":"integer",
+                      "description": "ID unico de cada usuario",
+                      "exemple": 1
+                    },
+                    "nome": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "João"
+                    },
+                    "email": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "João@email.com"
+                    },
+                    "status": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "padrao"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          }
+        }
+      }
+    },
+    "/usuarios/{id-usuario}" :{
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Lista um unico usuario",
+        "description": "Lista um unico usuario cadastrado na base",
+        "operationId": "Listar usuarios",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Dados obtidos",
+            "description": "Enviar via paramentro o id do usuario selecionado",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": "{baseUrlApi}/usuario/12"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type":"integer",
+                      "description": "ID unico de cada usuario",
+                      "exemple": 1
+                    },
+                    "nome": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "João"
+                    },
+                    "email": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "João@email.com"
+                    },
+                    "status": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "padrao"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          },
+          "404": {
+            "description": "Retorna um erro do servidor ou banco de dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type":"string",
+                  "description": "Usuário não encontrado",
+                  "exemple": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/delete" :{
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Apaga um unico usuario",
+        "description": "Apagar um unico usuario cadastrado na base",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Dados obtidos",
+            "description": "Enviar via paramentro o id do usuario selecionado",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": 3
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type":"integer",
+                      "description": "ID unico de cada usuario",
+                      "exemple": "usuario excluido com sucesso!"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          },
+          "404": {
+            "description": "Retorna um erro do servidor ou banco de dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type":"string",
+                  "description": "Usuário não encontrado",
+                  "exemple": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamentos/novo" :{
+      "post": {
+        "tags": [
+          "Agendamento"
+        ],
+        "summary": "Adicionar Novo agendamento",
+        "description": "",
+        "operationId": "novo agendamento",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Dados para cadastro",
+            "description": "Payload para criar novo agendamento",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data_agendamento": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "2022-05-07"
+                },
+                "horario": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "20:20:20"
+                },
+                "barbeiro": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "Zé"
+                },
+                "id_usuario": {
+                  "type":"integer",
+                  "description": "id do usuario logado e requisitou o agendamento",
+                  "exemple": 4
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201":{
+            "description": "Sucesso",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "Usuário Criado com sucesso!"
+                    },
+                    "usuario": {
+                      "type":"object",
+                      "description": "",
+                      "exemple": {
+                        "usuario": "batatinha@teste3",
+                        "id": 1
+                      }
+                    }
+                  }
+                }
+          },
+          "409": {
+            "description": "Email ja cadastrado na base de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          }
+        }
+      }
+    },
+    "/agendamentos" :{
+      "get": {
+        "tags": [
+          "Agendamento"
+        ],
+        "summary": "Lista todos os agendamentos cadastrados",
+        "description": "",
+        "operationId": "Listar agendamentos",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "dados obtidos",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": 1
+                },
+                "data_agendamemnto": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "2022-05-06"
+                },
+                "horario": {
+                  "type":"string",
+                  "description": "",
+                  "exemple": "20:20:20"
+                },
+                "status": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": 0
+                },
+                "id_usuario": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": 2
+                },
+                "nome_usuario": {
+                  "type":"string",
+                  "description": "nome do usuario logado e requisitou o agendamento",
+                  "exemple": "Brian Axcel"
+                }
+              }
+            }
+
+          }
+
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type":"integer",
+                      "description": "ID unico de cada usuario",
+                      "exemple": 1
+                    },
+                    "nome": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "João"
+                    },
+                    "email": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "João@email.com"
+                    },
+                    "status": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "padrao"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          }
+        }
+      }
+    },
+    "/agendamentos/{id-agendamento}" :{
+      "get": {
+        "tags": [
+          "Agendamento"
+        ],
+        "summary": "Lista um unico Agendamento",
+        "description": "Lista um unico agendamento cadastrado na base",
+        "operationId": "Listar Agendamento",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Dados obtidos",
+            "description": "Enviar via paramentro o id do usuario selecionado",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": "{baseUrlApi}/agendamentos/12"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type":"integer",
+                      "description": "ID unico de cada agendamento",
+                      "exemple": 1
+                    },
+                    "data_agendamento": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "2022-05-06"
+                    },
+                    "horario": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "20:20:20"
+                    },
+                    "barbeiro": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "pedro"
+                    },
+                    "status": {
+                      "type":"integer",
+                      "description": "",
+                      "exemple": 0
+                    },
+                    "id_usuario": {
+                      "type":"integer",
+                      "description": "id do usuario que fez o agendamento",
+                      "exemple": 3
+                    },
+                    "nome_usuario": {
+                      "type":"string",
+                      "description": "nome do usuario que fez o agendamento",
+                      "exemple": "João"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          },
+          "404": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type":"string",
+                  "description": "Agendamento não encontrado",
+                  "exemple": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamentos/usuario/{id-usuario}" :{
+      "get": {
+        "tags": [
+          "Agendamento"
+        ],
+        "summary": "Lista todos os agendamentos do usuario informado",
+        "description": "Lista todos os agendamentos do usuario informado cadastrado na base",
+        "operationId": "Listar Agendamentos por usuario",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Dados obtidos",
+            "description": "Enviar via paramentro o id do usuario selecionado",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": "{baseUrlApi}/agendamentos/usuario/12"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type":"integer",
+                      "description": "ID unico de cada agendamento",
+                      "exemple": 1
+                    },
+                    "data_agendamento": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "2022-05-06"
+                    },
+                    "horario": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "20:20:20"
+                    },
+                    "barbeiro": {
+                      "type":"string",
+                      "description": "",
+                      "exemple": "pedro"
+                    },
+                    "status": {
+                      "type":"integer",
+                      "description": "",
+                      "exemple": 0
+                    },
+                    "id_usuario": {
+                      "type":"integer",
+                      "description": "id do usuario que fez o agendamento",
+                      "exemple": 3
+                    },
+                    "nome_usuario": {
+                      "type":"string",
+                      "description": "nome do usuario que fez o agendamento",
+                      "exemple": "João"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          },
+          "404": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type":"string",
+                  "description": "Agendamento não encontrado",
+                  "exemple": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamentos/delete" :{
+      "delete": {
+        "tags": [
+          "Agendamento"
+        ],
+        "summary": "Apaga um unico Agendamento",
+        "description": "Apagar um unico Agendamento cadastrado na base",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Dados obtidos",
+            "description": "Enviar via body o id do usuario selecionado",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "id": {
+                  "type":"integer",
+                  "description": "",
+                  "exemple": 3
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200":{
+            "description": "OK",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagem": {
+                      "type":"integer",
+                      "description": "ID unico de cada agendamento",
+                      "exemple": "Agendamento excluido com sucesso!"
+                    }
+                  }
+                }
+          },
+          "500": {
+            "description": "Retorna um erro do servidor ou banco de dados"
+          },
+          "401": {
+            "description": "Sem token ou token invalido/expirado"
+          },
+          "404": {
+            "description": "Retorna um erro do servidor ou banco de dados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mensagem": {
+                  "type":"string",
+                  "description": "Agendamento não encontrado",
+                  "exemple": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+}
+}
