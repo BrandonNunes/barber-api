@@ -1,7 +1,15 @@
-const connection = require('../database/mysql')
+// const connection = require('../database/mysql')
+import { connection } from "../database/mysql";
+import { Request, Response } from "express";
+import Agendamentos from "../models/Agendamentos";
+import Usuarios from "../models/Usuarios";
 
-const listar_agendamentos = (req, res) => {
-  connection.getConnection((err, conn) => {
+export const listar_agendamentos = async (req: Request, res: Response) => {
+
+  const agendamento: any = await Agendamentos.findAll({include: Usuarios})
+  return res.json(agendamento)
+
+ /*  connection.getConnection((err, conn) => {
       if(err) return res.status(500).json({ mensagem: "Houve um erro!", erro: err })
       conn.query('SELECT agendamentos.*, usuarios.nome AS nome_usuario FROM agendamentos INNER JOIN usuarios ON agendamentos.id_usuario = usuarios.id;',
       (erro, results) => {
@@ -9,11 +17,11 @@ const listar_agendamentos = (req, res) => {
            if(erro) return res.status(500).json({ mensagem: "Houve um erro", erro: erro })
            return res.status(200).send(results)
       })
-  })
+  }) */
 };
 
 
-const listar_agendamento_id = (req, res) => {
+export const listar_agendamento_id = (req: Request, res: Response) => {
   const id_agendamento = req.params.id
   connection.getConnection((err, conn) => {
       if(err) return res.status(500).json({ mensagem: "Houve um erro!", erro: err })
@@ -22,7 +30,7 @@ const listar_agendamento_id = (req, res) => {
       (erro, results) => {
            conn.release()
            if(erro) return res.status(500).json({ mensagem: "Houve um erro", erro: erro })
-           if(results.length < 1){
+           if(Array(results).length < 1){
              return res.status(404).json({
                mensagem: "Nenhum agendamento encontrado"
              })
@@ -32,7 +40,7 @@ const listar_agendamento_id = (req, res) => {
   })
 };
 
-const listar_agendamento_por_usuario = (req, res) => {
+export const listar_agendamento_por_usuario = (req: Request, res: Response) => {
   const id_usuario = req.params.id
   connection.getConnection((err, conn) => {
       if(err) return res.status(500).json({ mensagem: "Houve um erro!", erro: err })
@@ -41,7 +49,7 @@ const listar_agendamento_por_usuario = (req, res) => {
       (erro, results) => {
            conn.release()
            if(erro) return res.status(500).json({ mensagem: "Houve um erro", erro: erro })
-           if(results.length < 1){
+           if(Array(results).length < 1){
              return res.status(404).json({
                mensagem: "Nenhum agendamento encontrado"
              })
@@ -51,12 +59,12 @@ const listar_agendamento_por_usuario = (req, res) => {
   })
 };
 
-const inserir_agendamento = (req, res) => {
+export const inserir_agendamento = (req: Request, res: Response) => {
   connection.getConnection((err, conn) => {
       if(err) return res.status(500).json({ mensagem: "Houve um erro!", erro: err })
       const QUERY = "INSERT INTO agendamentos (data_agendamento, horario, barbeiro, id_usuario) VALUES (?, ?, ?, ?);"
       conn.query(QUERY, [ req.body.data_agendamento, req.body.horario, req.body.barbeiro, req.body.id_usuario ],
-          (erro, results) => {
+          (erro, results: any) => {
               conn.release()
               if(erro) return res.status(500).json({ mensagem: "Houve um erro!", erro: erro })
               res.status(201).json({ mensagem: "Agendamento criado com sucesso!", id: results.insertId })
@@ -64,7 +72,7 @@ const inserir_agendamento = (req, res) => {
   })
 }
 
-const apagar_agendamento = (req, res) => {
+export const apagar_agendamento = (req: Request, res: Response) => {
 
   connection.getConnection((err, conn) => {
       if(err) return res.status(500).json({ mensagem: "Houve um erro!", erro: err })
@@ -78,12 +86,4 @@ const apagar_agendamento = (req, res) => {
           })
 
   })
-}
-
-module.exports = {
-  listar_agendamentos,
-    inserir_agendamento,
-    listar_agendamento_id,
-    apagar_agendamento,
-    listar_agendamento_por_usuario
 }
