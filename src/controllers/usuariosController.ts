@@ -2,6 +2,7 @@
 import { connection } from "../database/mysql";
 import { Request, Response } from "express";
 import Usuarios from "../models/Usuarios";
+import {Model} from "sequelize";
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
@@ -73,7 +74,7 @@ export const inserir_usuario = async (req: Request, res: Response) => {
           if(verifyUser.length > 0){
             return res.status(409).json({ mensagem: "email já cadastrado!" })
         }
-        req.body.email = hash
+        req.body.senha = hash
         await Usuarios.create( req.body )
         return res.status(201).json({
           mensagem: "Usuário Criado com sucesso!",
@@ -92,42 +93,34 @@ export const inserir_usuario = async (req: Request, res: Response) => {
     })
 }
 
-export const login_usuario = (req: Request, res: Response) => {
-    connection.getConnection((err, conn) => {
-        if(err) return res.status(500).json({ mensagem: "Houve um erro", erro: err })
-        conn.query('SELECT * FROM usuarios;', [ req.body.email ],
-    (err, results: any) => {
-       conn.release()
-        if(err) return res.status(500).json({ mensagem: "Falha na Autenticação", erro: err })
-        if(Array(results).length < 1){
-            res.status(401).json({
-                mensagem: "Falha na Autenticação"
-            })
+export const login_usuario = async (req: Request, res: Response) => {
+  const {email, senha} = req.body;
+  try{
+    const user: any = await Usuarios.findOne({where: {email}})
+    if (!user){
+      return res.status(401).json({
+        mensagem: "Falha na Autenticação"
+      })
+    }
+    const verifyPass = bcrypt.compareSync(senha, user.senha)
+    if (verifyPass) {
+      let token = jwt.sign({
+        id: user.id,
+        email: user.email
+      }, process.env.JWT_KEY, {expiresIn: "7d"})
+      return res.status(200).json({
+        mensagem: "Autenticado com sucesso!",
+        token: token,
+        usuario: {
+          ...user.dataValues,
+          senha: undefined
         }
-        bcrypt.compare(req.body.senha, results[0].senha, (err: any, result: any) => {
-            if(err) return res.status(401).json({mensagem: "Falha na Autenticação"})
-            if(result){
-                const token = jwt.sign({
-                    id:results[0].id,
-                    email:results[0].email
-                },process.env.JWT_KEY,
-            {
-                expiresIn:"7d"
-            });
-            return res.status(200).send({
-                mensagem:"Autenticado com sucesso",
-                token: token,
-                usuario: {
-                  id: results[0].id,
-                  nome: results[0].nome,
-                  email: results[0].email,
-                  status: results[0].status
-                }
-              })
-            }
-            return res.status(401).send({mensagem:"Falha na Autenticação"})
-        })
+      })
+    }
+    return res.status(401).send({mensagem:"Falha na Autenticação"})
+  }
+  catch (e) {
+    return res.status(500).send({mensagem:"Falha na Autenticação", erro: e})
+  }
 
-    })
-    })
 }

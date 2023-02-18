@@ -23,10 +23,12 @@ const Usuarios = sequelize.define('usuarios', {
   },
   telefone: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
+    defaultValue: ""
   },
   status: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    defaultValue: 1
   },
 
 })

@@ -5,7 +5,8 @@
     "version": "1.0.0",
     "title": "API Barbearia"
   },
-  "host": "https://barbearia-api-app.herokuapp.com",
+  "host": "localhost:4000",
+
   "basePath": "/api",
   "tags": [
     {
@@ -24,7 +25,6 @@
     }
   ],
   "schemes": [
-    "https",
     "http"
   ],
   "paths": {
@@ -133,18 +133,27 @@
                 "nome": {
                   "type":"string",
                   "description": "",
-                  "exemple": "batatinha"
+                  "exemple": "batatinha",
+                  "required": true
                 },
                 "email": {
                   "type":"string",
                   "description": "",
-                  "exemple": "batatinha123@email.com"
+                  "exemple": "batatinha123@email.com",
+                  "required": true
                 },
                 "senha": {
                   "type":"string",
                   "description": "",
-                  "exemple": "batatinhaFrita123"
-                }
+                  "exemple": "batatinhaFrita123",
+                  "required": true
+                },
+                "telefone": {
+                "type":"string",
+                "description": "",
+                "exemple": "99 99999 9999",
+                "required": false
+              }
               }
             }
           }
@@ -194,41 +203,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "dados obtidos",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type":"integer",
-                  "description": "",
-                  "exemple": 1
-                },
-                "nome": {
-                  "type":"string",
-                  "description": "",
-                  "exemple": "João"
-                },
-                "email": {
-                  "type":"string",
-                  "description": "",
-                  "exemple": "batatinha123@email.com"
-                },
-                "status": {
-                  "type":"string",
-                  "description": "",
-                  "exemple": "padrao"
-                }
-              }
-            }
 
-          }
-
-        ],
         "responses": {
           "200":{
             "description": "OK",
@@ -510,51 +485,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "dados obtidos",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type":"integer",
-                  "description": "",
-                  "exemple": 1
-                },
-                "data_agendamemnto": {
-                  "type":"string",
-                  "description": "",
-                  "exemple": "2022-05-06"
-                },
-                "horario": {
-                  "type":"string",
-                  "description": "",
-                  "exemple": "20:20:20"
-                },
-                "status": {
-                  "type":"integer",
-                  "description": "",
-                  "exemple": 0
-                },
-                "id_usuario": {
-                  "type":"integer",
-                  "description": "",
-                  "exemple": 2
-                },
-                "nome_usuario": {
-                  "type":"string",
-                  "description": "nome do usuario logado e requisitou o agendamento",
-                  "exemple": "Brian Axcel"
-                }
-              }
-            }
 
-          }
-
-        ],
         "responses": {
           "200":{
             "description": "OK",
