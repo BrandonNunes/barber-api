@@ -3,17 +3,16 @@ import mysql from 'mysql2'
 import { Sequelize } from 'sequelize'
 
 export const connection = mysql.createPool({
-    database: process.env.MYSQL_DATABASE,
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MSQL_PASSWORD,
-    port: Number(process.env.MYSQL_PORT)
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
 })
 
-export const sequelize = new Sequelize(String(process.env.MYSQL_DATABASE),
-String(process.env.MYSQL_USER), process.env.MSQL_PASSWORD, {
-  host: process.env.MYSQL_HOST,
-  dialect: 'mysql',//mysql' | 'mariadb' | 'postgres' | 'mssql' */
+export const sequelize = new Sequelize(String(process.env.DB_DATABASE),
+String(process.env.DB_USER), process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'postgres',//mysql' | 'mariadb' | 'postgres' | 'mssql' */
   define: {
     timestamps: false
   }
