@@ -1,5 +1,5 @@
 // const connection = require('../database/mysql')
-import { connection } from "../database/mysql";
+import { connection } from "../database/database";
 import { Request, Response } from "express";
 import Agendamentos from "../models/Agendamentos";
 import Usuarios from "../models/Usuarios";

@@ -1,7 +1,7 @@
 const AdminJS = require('adminjs')
 const AdminJSExpress = require('@adminjs/express')
 const AdminSequelize = require('@adminjs/sequelize')
-import { sequelize } from "../database/mysql"
+import { sequelize } from "../database/database"
 
 AdminJS.registerAdapter(AdminSequelize)
 const locale = {

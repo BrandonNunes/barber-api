@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import { sequelize } from "../database/mysql";
+import { sequelize } from "../database/database";
 import Agendamentos from "./Agendamentos";
 
 const Usuarios = sequelize.define('usuarios', {

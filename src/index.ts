@@ -5,7 +5,7 @@ import cors from 'cors'
 import rotasUsuarios from "./routes/usuarios"
 import rotasAgendamentos from './routes/agendamentos'
 const port = process.env.PORT || 4000
-import { sequelize } from "./database/mysql"
+import { sequelize } from "./database/database"
 import routerAdmin from "./admin"
 
 const app = express()
