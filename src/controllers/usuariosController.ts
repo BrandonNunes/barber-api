@@ -1,11 +1,7 @@
-// const connection = require('../database/mysql')
-import { connection } from "../database/database";
 import { Request, Response } from "express";
 import Usuarios from "../models/Usuarios";
-import {Model} from "sequelize";
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
-
 
 export const listar_usuarios = async (req: Request, res: Response) => {
   try{

@@ -1,6 +1,5 @@
 require('dotenv').config()
 import express ,{ Express, Request, Response } from "express"
-import morgan from "morgan"
 import cors from 'cors'
 import rotasUsuarios from "./routes/usuarios"
 import rotasAgendamentos from './routes/agendamentos'
@@ -19,7 +18,6 @@ app.use('/admin', routerAdmin)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use(morgan('combined'))
 app.use(cors())
 app.use('/api', rotasUsuarios)
 app.use('/api', rotasAgendamentos)
